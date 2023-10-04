@@ -25,7 +25,7 @@ class Product(models.Model):
     tags = TaggableManager()
 
     def __str__(self):
-        return f"{self.name} - {self.price}"
+        return self.name
 
 class ProductImages(models.Model):
     product = models.ForeignKey(Product,verbose_name=_('product'),related_name='product_images',on_delete=models.CASCADE)
