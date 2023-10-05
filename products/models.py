@@ -35,16 +35,21 @@ class Product(models.Model):
 class ProductImages(models.Model):
     product = models.ForeignKey(Product,verbose_name=_('product'),related_name='product_images',on_delete=models.CASCADE)
     image = models.ImageField(_('image'),upload_to='product_images')
+    
 
+    
 
 class Brand(models.Model):
     name = models.CharField(_('name'),max_length=100)
     image = models.ImageField(_('image'),upload_to='brand')
+    slug = models.SlugField(null=True,blank=True)
 
     def __str__(self):
         return self.name
 
-
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)    
+        super(Brand, self).save(*args, **kwargs) 
 
 class Review(models.Model):
     user = models.ForeignKey(User,verbose_name=_('user'),related_name='user_review',on_delete=models.SET_NULL,null=True,blank=True)
