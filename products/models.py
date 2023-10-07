@@ -5,6 +5,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from taggit.managers import TaggableManager
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
+from django.db.models.aggregates import Avg , Sum,Count
 
 
 FLAG_TYPES = (
@@ -32,6 +33,11 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)    
         super(Product, self).save(*args, **kwargs) 
+    
+    
+    def get_avg_rate(self):
+        avg = self.product_review.aggregate(avg=Avg('rate'))
+        return avg
 
 class ProductImages(models.Model):
     product = models.ForeignKey(Product,verbose_name=_('product'),related_name='product_images',on_delete=models.CASCADE)
@@ -50,7 +56,33 @@ class Brand(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)    
-        super(Brand, self).save(*args, **kwargs) 
+        super(Brand, self).save(*args, **kwargs)
+
+    def get_avg_rate(self):
+        'brand --> products ---> avg'
+        data = Product.objects.filter(brand=self)
+        avg = []
+        for p in data:
+            product_rates = p.product_review.aggregate(avg=Avg('rate'))
+            if product_rates['avg'] != None:
+                avg.append(product_rates['avg'])
+
+
+        if len(avg) ==0 :
+            result = 0
+        else:
+            result = sum(avg)/len(avg)
+        return result
+
+    def get_rate_count(self):
+        data = Product.objects.filter(brand=self)
+        result = 0
+        for p in data:
+            product_rates = p.product_review.aggregate(count=Count('id'))
+            result += product_rates['count']
+        return result
+        
+         
 
 class Review(models.Model):
     user = models.ForeignKey(User,verbose_name=_('user'),related_name='user_review',on_delete=models.SET_NULL,null=True,blank=True)
