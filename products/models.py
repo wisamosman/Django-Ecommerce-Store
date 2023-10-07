@@ -24,6 +24,7 @@ class Product(models.Model):
     flag = models.CharField(_('flag'),max_length=20,choices=FLAG_TYPES)
     tags = TaggableManager()
     slug = models.SlugField(null=True,blank=True)
+    video = models.URLField(null=True,blank=True)
 
     def __str__(self):
         return self.name
