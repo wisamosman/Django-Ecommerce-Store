@@ -41,6 +41,13 @@ class Cart(models.Model):
     user = models.ForeignKey(User,related_name='cart_user',on_delete=models.SET_NULL,blank=True,null=True)
     completed = models.BooleanField(default=False)
 
+     # instance method
+    def cart_total(self):
+        total = 0
+        for product in self.cart_detail.all():
+            total += product.total
+        return total
+
 
 
 class CartDetail(models.Model):

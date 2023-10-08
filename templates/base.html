@@ -137,7 +137,7 @@
                         <button class="header-widget header-cart" title="Cartlist">
                             <i class="fas fa-shopping-basket"></i>
                             <sup>9+</sup>
-                            <span>total price<small>$345.00</small></span>
+                            <span>total price<small>${{cart_data.cart_total}}</small></span>
                         </button>
                     </div>
                 </div>
@@ -384,7 +384,7 @@
                                     <input class="action-input" title="Quantity Number" type="text" name="quantity" value="{{item.quantity}}">
                                     <button class="action-plus" title="Quantity Plus"><i class="icofont-plus"></i></button>
                                 </div>
-                                <h6>$56.98</h6>
+                                <h6>{{item.total}}</h6>
                             </div>
                         </div>
                     </li> 
@@ -398,7 +398,7 @@
                 </form>
                 <a class="cart-checkout-btn" href="checkout.html">
                     <span class="checkout-label">Proceed to Checkout</span>
-                    <span class="checkout-price">$369.78</span>
+                    <span class="checkout-price">${{cart_data.cart_total}</span>
                 </a>
             </div>
         </aside>
