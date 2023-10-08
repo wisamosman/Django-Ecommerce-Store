@@ -1,4 +1,4 @@
-from .models import Cart
+from .models import Cart, CartDetail
 
 
 
@@ -6,8 +6,11 @@ from .models import Cart
 
 def get_cart_data(request):
     if request.user.is_authenticated:
-        cart = Cart.objects.get_or_create(user=request.user,completed=False)
-        return {'cart_data':cart}
+        cart , created = Cart.objects.get_or_create(user=request.user,completed=False)
+        cart_detail = CartDetail.objects.filter(cart=cart) 
+
+        return {'cart_data':cart, 'cart_detail_data':cart_detail}
 
     else:
         return {}
+       
