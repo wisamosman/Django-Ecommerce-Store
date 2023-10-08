@@ -9,6 +9,11 @@ from products.models import Product
 class OrderList(ListView):
     model = Order
 
+    def get_queryset(self):
+        queryset = super().get_queryset()   # all orders 
+        queryset = queryset.filter(user=self.request.user)
+        return queryset
+
 
 def add_to_cart(request):
 
