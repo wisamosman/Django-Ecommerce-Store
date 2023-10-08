@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_summernote',
     'settings',
     "debug_toolbar",
+    'orders',
 ]
 
 MIDDLEWARE = [
