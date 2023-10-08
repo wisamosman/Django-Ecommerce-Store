@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 class OrderList(LoginRequiredMixin,ListView):
     model = Order
+    paginate_by = 1
 
     def get_queryset(self):
         queryset = super().get_queryset()   # all orders 
