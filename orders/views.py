@@ -26,7 +26,7 @@ def add_to_cart(request):
     cart_detail.total = int(qauntity) * product.price
     cart_detail.save()
 
-    return redirect(f'/products/{{product.slug}}')
+    return redirect(f'/products/{product.slug}')
     # # cart detail 
     # cart_detail  , created = CartDetail.objects.get_or_create(cart=cart , product=product)
     # if created : 
