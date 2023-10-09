@@ -4,7 +4,7 @@ from .models import Product, Brand
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    brand = serializers.StringRelatedField()
+    #brand = serializers.StringRelatedField()
     review_count = serializers.SerializerMethodField()
     avg_rate = serializers.SerializerMethodField()
     class Meta:
