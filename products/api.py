@@ -6,6 +6,7 @@ from .models import Product , Brand
 import django_filters.rest_framework
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from .filters import ProductFilter
 
 
 # @api_view(['GET'])
@@ -25,9 +26,10 @@ from rest_framework import filters
 class ProductListAPI(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    # filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend,filters.OrderingFilter]
     filterset_fields = ['brand', 'flag','name','price']
-
+    filterset_class = ProductFilter
+    ordering_fields = ['price', 'flag']
     # filter_backends = [filters.SearchFilter]
     # search_fields = ['name', 'subtitle']
 
