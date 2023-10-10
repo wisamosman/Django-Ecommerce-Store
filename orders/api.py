@@ -54,7 +54,7 @@ class OrderDetailAPI(generics.RetrieveAPIView):
     serializer_class = OrderDetailSerializer
     queryset = Order.objects.all()
 
-class CreateOrder(generics.GenericAPIView):
+class CreateOrderAPI(generics.GenericAPIView):
     def post(self,request,*args, **kwargs):
         user = User.objects.get(username=self.kwargs['username'])
         cart = Cart.objects.get(user=user,completed=False)
