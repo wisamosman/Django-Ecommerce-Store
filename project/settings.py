@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     #'rest_framework_simplejwt',
     'dj_rest_auth',
     'rosetta',
+    'tof',
 ]
 
 REST_FRAMEWORK = {
