@@ -1,7 +1,8 @@
 {% load static %}
 {% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" {% if LANGUAGE_CODE == 'ar' %}  dir="rtl" {% endif %}>
     <head>
         <!--=====================================
                     META TAG PART START
@@ -32,22 +33,36 @@
         <!-- FAVICON -->
         <link rel="icon" href="images/favicon.png">
 
-        <!-- FONTS -->
-        <link rel="stylesheet" href="{% static 'ltr/fonts/flaticon/flaticon.css' %}">
-        <link rel="stylesheet" href="{% static 'ltr/fonts/icofont/icofont.min.css' %}">
-        <link rel="stylesheet" href="{% static 'ltr/fonts/fontawesome/fontawesome.min.css' %}">
+        {% if LANGUAGE_CODE == 'en' or LANGUAGE_CODE == 'de' %}
+            <link rel="stylesheet" href="{% static 'ltr/fonts/flaticon/flaticon.css' %}">
+            <link rel="stylesheet" href="{% static 'ltr/fonts/icofont/icofont.min.css' %}">
+            <link rel="stylesheet" href="{% static 'ltr/fonts/fontawesome/fontawesome.min.css' %}">
+            <link rel="stylesheet" href="{% static 'ltr/vendor/venobox/venobox.min.css' %}">
+            <link rel="stylesheet" href="{% static 'ltr/vendor/slickslider/slick.min.css' %}">
+            <link rel="stylesheet" href="{% static 'ltr/vendor/niceselect/nice-select.min.css' %}">
+            <link rel="stylesheet" href="{% static 'ltr/vendor/bootstrap/bootstrap.min.css' %}">
+            <link rel="stylesheet" href="{% static 'ltr/css/main.css' %}">
 
-        <!-- VENDOR -->
-        <link rel="stylesheet" href="{% static 'ltr/vendor/venobox/venobox.min.css' %}">
-        <link rel="stylesheet" href="{% static 'ltr/vendor/slickslider/slick.min.css' %}">
-        <link rel="stylesheet" href="{% static 'ltr/vendor/niceselect/nice-select.min.css' %}">
-        <link rel="stylesheet" href="{% static 'ltr/vendor/bootstrap/bootstrap.min.css' %}">
+        {% else %}
+            <link rel="stylesheet" href="{% static 'rtl/fonts/flaticon/flaticon.css' %}">
+            <link rel="stylesheet" href="{% static 'rtl/fonts/icofont/icofont.min.css' %}">
+            <link rel="stylesheet" href="{% static 'rtl/fonts/fontawesome/fontawesome.min.css' %}">
+            <link rel="stylesheet" href="{% static 'rtl/vendor/venobox/venobox.min.css' %}">
+            <link rel="stylesheet" href="{% static 'rtl/vendor/slickslider/slick.min.css' %}">
+            <link rel="stylesheet" href="{% static 'rtl/vendor/niceselect/nice-select.min.css' %}">
+            <link rel="stylesheet" href="{% static 'rtl/vendor/bootstrap/bootstrap.min.css' %}">
+            <link rel="stylesheet" href="{% static 'rtl/css/main.css' %}">
+        {% endif %}
 
-        <!-- CUSTOM -->
-        <link rel="stylesheet" href="{% static 'ltr/css/main.css' %}">
+
+        
         {% block css %}
             <link rel="stylesheet" href="{% static 'ltr/css/index.css' %}">
         {% endblock css %}
+            
+        
+        
+        
         <!--=====================================
                     CSS LINK PART END
         =======================================-->
@@ -85,13 +100,13 @@
                                     </select>
                                     <input type="submit" value="Go">
                                 </form>
+
+
                             </div>
-                            
                         </div>
                     </div>
                     <div class="col-md-7 col-lg-4">
                         <ul class="header-top-list">
-                            
                             <li><a href="faq.html">need help</a></li>
                             <li><a href="contact.html">contact us</a></li>
                         </ul>
@@ -120,7 +135,8 @@
                     <a href="index.html" class="header-logo">
                         <img src="{{company_data.logo.url}}" alt="logo">
                     </a>
-                     {% if request.user.is_authenticated %}
+
+                    {% if request.user.is_authenticated %}
                         <a href="login.html" class="header-widget" title="My Account">
                             <img src="{{request.user.user_profile.image.url}}" alt="user">
                         </a>       
@@ -133,13 +149,13 @@
                         </a>
                     {% endif %}
 
+
                     <form class="header-form">
                         <input type="text" placeholder="Search anything...">
                         <button><i class="fas fa-search"></i></button>
                     </form>
 
                     <div class="header-widget-group">
-                        
                         <a href="wishlist.html" class="header-widget" title="Wishlist">
                             <i class="fas fa-heart"></i>
                             <sup>0</sup>
@@ -168,22 +184,18 @@
                         <div class="navbar-content">
                             <ul class="navbar-list">
                                 <li class="navbar-item dropdown">
-                                    <a class="navbar-link " href="/">{% translate "Home" %}</a>
-                                   
+                                    <a class="navbar-link" href="/">{% translate "Home" %}</a>
                                 </li>
-                                <li class="navbar-item ">
-                                    <a class="navbar-link " href="/products">{% translate "Shop" %}</a>
-                                    
+                                <li class="navbar-item">
+                                    <a class="navbar-link" href="/products">{% translate "Shop" %}</a>
                                 </li>
                                 <li class="navbar-item ">
                                     <a class="navbar-link " href="/products/brand/">{% translate "Brands" %}</a>
-                                    
                                 </li>
                                 <li class="navbar-item ">
                                     <a class="navbar-link " href="/orders">{% translate "Orders" %}</a>
-                                    
                                 </li>
-                               
+                            </ul>
                             <div class="navbar-info-group">
                                 <div class="navbar-info">
                                     <i class="icofont-ui-touch-phone"></i>
@@ -377,6 +389,7 @@
                 <button class="cart-close"><i class="icofont-close"></i></button>
             </div>
             <ul class="cart-list">
+                
                 {% for item in cart_detail_data %}              
                     <li class="cart-item">
                         <div class="cart-media">
@@ -399,16 +412,12 @@
                         </div>
                     </li> 
                 {% endfor %}
+
             </ul>
             <div class="cart-footer">
-                <button class="coupon-btn">Do you have a coupon code?</button>
-                <form class="coupon-form">
-                    <input type="text" placeholder="Enter your coupon code">
-                    <button type="submit"><span>apply</span></button>
-                </form>
-                <a class="cart-checkout-btn" href="checkout.html">
+                <a class="cart-checkout-btn" href="/orders/checkout">
                     <span class="checkout-label">Proceed to Checkout</span>
-                    <span class="checkout-price">${{cart_data.cart_total}</span>
+                    <span class="checkout-price">${{cart_data.cart_total}}</span>
                 </a>
             </div>
         </aside>
@@ -693,15 +702,9 @@
 
         
         {% block body %}
-        
+            
         {% endblock body %}
-
-
-       
-
-
-        
-
+            
 
         <!--=====================================
                     NEWSLETTER PART START
@@ -815,15 +818,13 @@
                                 <li>
                                     <i class="icofont-ui-email"></i>
                                     <p>
-                                        <span>{{company_data.email}}</span>
-                                        
+                                        {{company_data.email}}
                                     </p>
                                 </li>
                                 <li>
                                     <i class="icofont-ui-touch-phone"></i>
                                     <p>
-                                        <span>+120 279 532 13</span>
-                                        <span>+120 279 532 14</span>
+                                        {{company_data.phones}}
                                     </p>
                                 </li>
                                 <li>
@@ -888,27 +889,46 @@
         <!--=====================================
                     JS LINK PART START
         =======================================-->
-        <!-- VENDOR -->
-        <script src="{% static 'ltr/vendor/bootstrap/jquery-1.12.4.min.js' %}"></script>
-        <script src="{% static 'ltr/vendor/bootstrap/popper.min.js' %}"></script>
-        <script src="{% static 'ltr/vendor/bootstrap/bootstrap.min.js' %}"></script>
-        <script src="{% static 'ltr/vendor/countdown/countdown.min.js' %}"></script>
-        <script src="{% static 'ltr/vendor/niceselect/nice-select.min.js' %}"></script>
-        <script src="{% static 'ltr/vendor/slickslider/slick.min.js' %}"></script>
-        <script src="{% static 'ltr/vendor/venobox/venobox.min.js' %}"></script>
 
-        <!-- CUSTOM -->
-        <script src="{% static 'ltr/js/nice-select.js' %}"></script>
-        <script src="{% static 'ltr/js/countdown.js' %}"></script>
-        <script src="{% static 'ltr/js/accordion.js' %}"></script>
-        <script src="{% static 'ltr/js/venobox.js' %}"></script>
-        <script src="{% static 'ltr/js/slick.js' %}"></script>
-        <script src="{% static 'ltr/js/main.js' %}"></script> 
-        <!--=====================================
-                    JS LINK PART END
-        =======================================-->
+        {% if LANGUAGE_CODE == 'en' or LANGUAGE_CODE == 'de' %}
+            <script src="{% static 'ltr/vendor/bootstrap/jquery-1.12.4.min.js' %}"></script>
+            <script src="{% static 'ltr/vendor/bootstrap/popper.min.js' %}"></script>
+            <script src="{% static 'ltr/vendor/bootstrap/bootstrap.min.js' %}"></script>
+            <script src="{% static 'ltr/vendor/countdown/countdown.min.js' %}"></script>
+            <script src="{% static 'ltr/vendor/niceselect/nice-select.min.js' %}"></script>
+            <script src="{% static 'ltr/vendor/slickslider/slick.min.js' %}"></script>
+            <script src="{% static 'ltr/vendor/venobox/venobox.min.js' %}"></script>
+            <script src="{% static 'ltr/js/nice-select.js' %}"></script>
+            <script src="{% static 'ltr/js/countdown.js' %}"></script>
+            <script src="{% static 'ltr/js/accordion.js' %}"></script>
+            <script src="{% static 'ltr/js/venobox.js' %}"></script>
+            <script src="{% static 'ltr/js/slick.js' %}"></script>
+            <script src="{% static 'ltr/js/main.js' %}"></script> 
+        {% else %}
+            <script src="{% static 'rtl/vendor/bootstrap/jquery-1.12.4.min.js' %}"></script>
+            <script src="{% static 'rtl/vendor/bootstrap/popper.min.js' %}"></script>
+            <script src="{% static 'rtl/vendor/bootstrap/bootstrap.min.js' %}"></script>
+            <script src="{% static 'rtl/vendor/countdown/countdown.min.js' %}"></script>
+            <script src="{% static 'rtl/vendor/niceselect/nice-select.min.js' %}"></script>
+            <script src="{% static 'rtl/vendor/slickslider/slick.min.js' %}"></script>
+            <script src="{% static 'rtl/vendor/venobox/venobox.min.js' %}"></script>
+            <script src="{% static 'rtl/js/nice-select.js' %}"></script>
+            <script src="{% static 'rtl/js/countdown.js' %}"></script>
+            <script src="{% static 'rtl/js/accordion.js' %}"></script>
+            <script src="{% static 'rtl/js/venobox.js' %}"></script>
+            <script src="{% static 'rtl/js/slick.js' %}"></script>
+            <script src="{% static 'rtl/js/main.js' %}"></script> 
+        {% endif %}
+
     </body>
 </html>
+
+
+
+
+
+
+
 
 
 
