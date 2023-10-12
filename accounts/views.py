@@ -1,4 +1,5 @@
 from django.shortcuts import render , redirect
+from django.contrib.admin.views.decorators import staff_member_required
 from .forms import SignupForm , ActivateUser
 from .models import Profile , Phones , Address
 from django.contrib.auth.models import User
@@ -20,6 +21,7 @@ def signup(request):
 
 
 
+@staff_member_required
 def dashboard(request):
     new_products = Product.objects.filter(flag='New').count()
     sale_products = Product.objects.filter(flag='Sale').count()
