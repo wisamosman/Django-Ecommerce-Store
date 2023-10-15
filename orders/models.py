@@ -62,8 +62,8 @@ class CartDetail(models.Model):
 class Coupon(models.Model):
     code = models.CharField(max_length=25)
     percentage = models.FloatField()
-    start_date = models.DateTimeField(default=timezone.now)
-    end_date = models.DateTimeField(default=timezone.now)
+    start_date = models.DateField(default=timezone.now)
+    end_date = models.DateField(default=timezone.now)
     quantity = models.IntegerField()
 
     def __str__(self):
