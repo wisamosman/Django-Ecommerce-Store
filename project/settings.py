@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'rosetta',
     'tof',
+    'django_bootstrap5',
 ]
 
 REST_FRAMEWORK = {
@@ -190,3 +191,5 @@ LANGUAGES = [
     ("en", ("English")),
     ("de", ("Germany")),
 ]
+
+AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']
