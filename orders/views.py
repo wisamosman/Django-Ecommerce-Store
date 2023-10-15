@@ -5,7 +5,7 @@ from django.views.generic import ListView
 from .models import Order, Cart , CartDetail
 from products.models import Product
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from settings.models import DeliveryFee
 
 class OrderList(LoginRequiredMixin,ListView):
     model = Order
@@ -19,7 +19,22 @@ class OrderList(LoginRequiredMixin,ListView):
 
 
 def chackout_page(request):
-    return render(request,'orders/checkout.html',{})
+    cart = Cart.objects.get(user=request.user , completed=False)
+    cart_detail = CartDetail.objects.filter(cart=cart)
+    delivery_fee = DeliveryFee.objects.last()
+
+    sub_total = cart.cart_total()
+    print(sub_total)
+    discount = 0
+    total = sub_total + delivery_fee.fee
+
+    return render(request,'orders/checkout.html',{
+        'cart_detail':cart_detail , 
+        'delivery_fee' : delivery_fee , 
+        'sub_total': sub_total , 
+        'total': total , 
+        'discount': discount
+        })
 
 
 
