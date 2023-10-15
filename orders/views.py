@@ -17,6 +17,12 @@ class OrderList(LoginRequiredMixin,ListView):
         return queryset
 
 
+
+def chackout_page(request):
+    return render(request,'orders/checkout.html',{})
+
+
+
 def add_to_cart(request):
 
     # get data frontend 
