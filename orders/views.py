@@ -32,6 +32,9 @@ def chackout_page(request):
                 code_value = cart.cart_total() / 100*coupon.percentage
                 sub_total = cart.cart_total() -  code_value
                 total = sub_total + delivery_fee.fee
+                cart.coupon = coupon 
+                cart.total_with_coupon = sub_total
+                cart.save()
                 return render(request,'orders/checkout.html',{
                 'cart_detail':cart_detail , 
                 'delivery_fee' : delivery_fee , 
