@@ -7,6 +7,10 @@ from products.models import Product
 from django.contrib.auth.mixins import LoginRequiredMixin
 from settings.models import DeliveryFee
 import datetime
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+
+
 
 class OrderList(LoginRequiredMixin,ListView):
     model = Order
@@ -35,13 +39,15 @@ def chackout_page(request):
                 cart.coupon = coupon 
                 cart.total_with_coupon = sub_total
                 cart.save()
-                return render(request,'orders/checkout.html',{
+                html = render_to_string('include/checkout_table.html',{
                 'cart_detail':cart_detail , 
                 'delivery_fee' : delivery_fee , 
                 'sub_total': round(sub_total,2) , 
                 'total': round(total,2) , 
-                'discount': round(code_value,2),
+                'discount': round(code_value,2) , 
+                request:request
                 })
+                return JsonResponse({'result':html})
 
     sub_total = cart.cart_total()
     

@@ -24,4 +24,4 @@ class EmailBackend(ModelBackend):
 
 
 
-        # return super().authenticate(request, username, password, **kwargs)
+        return super().authenticate(request, username, password, **kwargs)
