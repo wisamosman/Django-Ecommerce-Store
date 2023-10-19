@@ -9,9 +9,9 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from .tasks import send_m_email
 
-
-@cache_page(60 * 1)
+#@cache_page(60 * 1)
 def post_list_debug(request):
 
     # data = Product.objects.all()
@@ -90,7 +90,8 @@ def post_list_debug(request):
     # data = Product.objects.annotate(price_with_tax=F('price')*1.2)
     #data = Brand.objects.annotate(posts=Count('product_brand'))
     data = Product.objects.all()
-
+    # send email 1m user
+    send_m_email.delay()
     return render(request,'products/debug.html',{'data':data})
 
 @method_decorator(cache_page(60 * 5), name='dispatch')
