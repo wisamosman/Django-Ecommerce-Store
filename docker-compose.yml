@@ -8,4 +8,28 @@ services:
       - .:/app
     ports:
       - "8000:8000"
+    depends_on:
+      - redis
     container_name: djangoServer
+
+
+  redis:
+    image: redis:7.2.3-alpine3.18
+    container_name: redisServer
+
+
+  celery:
+    image: celery:alpine
+    container_name: celeryServer
+    restart: always
+    build: 
+      context: .
+    depends_on:
+      - redis
+      - djserver
+    volumes:
+      - .:/app
+    command: celery -A project worker --loglevel=info
+    environment:
+      CELERY_BROKER_URL : redis://redis:6379/0
+      CELERY_RESULT_BACKEND : redis://redis:6379/0
