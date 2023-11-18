@@ -1,10 +1,10 @@
-from project.celery import celery
+from celery import shared_task
 import time 
 
 
 
 
-@celery.task
+@shared_task
 def send_m_email():
     for x in range(10):
         print(f'sending message to {x}')
