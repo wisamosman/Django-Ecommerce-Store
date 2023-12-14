@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rosetta',
     'tof',
     'django_bootstrap5',
+    'drf_yasg',
 ]
 
 REST_FRAMEWORK = {
