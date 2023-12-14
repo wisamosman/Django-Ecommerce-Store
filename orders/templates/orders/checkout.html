@@ -194,7 +194,11 @@
                             </div>
                         </div>
                     </div>
+                            
                 </div>
+                <div class="checkout-proced">
+                    <button onclick="buy(event)" type="button" class="btn btn-inline">Pay</button>
+                </div>              
             </div>
         </div>
     </div>
@@ -350,7 +354,18 @@
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://js.stripe.com/v3/"></script>
+
 <script>
+
+function buy(event){
+    event.preventDefault()
+    console.log('process payment')
+}
+
+
+
+
     $(document).ready(function (e) {
         // submit reviewForm
         $(document).on("submit", "#couponForm", function (e) {

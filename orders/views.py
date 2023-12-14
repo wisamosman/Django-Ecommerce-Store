@@ -9,7 +9,8 @@ from settings.models import DeliveryFee
 import datetime
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-
+from django.conf import settings
+import stripe
 
 
 class OrderList(LoginRequiredMixin,ListView):
@@ -27,6 +28,8 @@ def chackout_page(request):
     cart = Cart.objects.get(user=request.user , completed=False)
     cart_detail = CartDetail.objects.filter(cart=cart)
     delivery_fee = DeliveryFee.objects.last()
+    pub_key = settings.STRIPE_API_KEY_PUBLISHABLE
+
     if request.method == 'POST':
         code = request.POST['coupon']
         coupon = Coupon.objects.get(code=code)
@@ -45,7 +48,8 @@ def chackout_page(request):
                 'sub_total': round(sub_total,2) , 
                 'total': round(total,2) , 
                 'discount': round(code_value,2) , 
-                request:request
+                request:request , 
+                'pub_key' : pub_key
                 })
                 return JsonResponse({'result':html})
 
@@ -97,3 +101,32 @@ def add_to_cart(request):
     # cart_detail.price = product.price
     # cart_detail.total = int(qauntity) * product.price
     # cart_detail.save()
+def process_payment(request):
+    # create product on strip  : ajax
+    checkout_session = stripe.checkout.Session.create(
+        line_items=[
+            {
+                # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                'price': '{{PRICE_ID}}',
+                'quantity': 1,
+            },
+        ],
+        mode='payment',
+        success_url='http://127.0.0.1:8000/orders/checkout/payment/success',
+        cancel_url='http://127.0.0.1:8000/orders/checkout/payment/failed',
+    )
+
+
+
+def payment_success(request):
+
+    code = ''
+    return render(request,'orders/success.html',{
+        'code': code
+    })
+
+
+
+def payment_failed(request):
+
+    return render(request,'orders/failed.html',{})
