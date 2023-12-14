@@ -1,13 +1,17 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-from tof.admin import TofAdmin, TranslationTabularInline
+from modeltranslation.admin import TranslationAdmin
 
 # Register your models here.
 from .models import Product,ProductImages,Brand,Review
 
 
-class ProductAdmin2(TofAdmin):
-    inlines = (TranslationTabularInline, )
+class ProductAdmin2(TranslationAdmin):
+    # inlines = (TranslationTabularInline, )
+    list_display = ['id','name']
+    # fields = ('name', 'description')
+    # only_current_lang = ('description', )
+    # inlines = (TranslationStackedInline, )
 
 class ProductImagesAdmin(admin.TabularInline):
     model = ProductImages

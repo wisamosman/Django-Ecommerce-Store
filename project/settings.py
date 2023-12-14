@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'accounts',
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,7 +51,7 @@ INSTALLED_APPS = [
     #'rest_framework_simplejwt',
     'dj_rest_auth',
     'rosetta',
-    'tof',
+    #'tof',
     'django_bootstrap5',
     'drf_yasg',
 ]
@@ -192,7 +193,7 @@ LANGUAGES = [
     ("en", ("English")),
     ("de", ("Germany")),
 ]
-
+MODELTRANSLATION_LANGUAGES = ('en', 'de')
 AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
