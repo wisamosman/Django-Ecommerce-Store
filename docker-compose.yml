@@ -10,6 +10,7 @@ services:
       - "8000:8000"
     depends_on:
       - redis
+      - db
     container_name: djangoServer
 
 
@@ -33,3 +34,19 @@ services:
     environment:
       CELERY_BROKER_URL : redis://redis:6379/0
       CELERY_RESULT_BACKEND : redis://redis:6379/0
+
+db:
+  image: postgres
+  environment: 
+  POSTGRES_USER: postgres 
+  POSTGRES_DB: amazon
+  POSTGRES_PASSWORD: postgres 
+  volumes:
+  - postgres_data:/var/lib/postgresql/data
+
+
+  
+    
+
+volumes:
+    postgres_data:      
