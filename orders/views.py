@@ -9,6 +9,7 @@ from settings.models import DeliveryFee
 import datetime
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from utils.generate_code import generate_code
 from django.conf import settings
 import stripe
 
@@ -61,9 +62,10 @@ def chackout_page(request):
     return render(request,'orders/checkout.html',{
         'cart_detail':cart_detail , 
         'delivery_fee' : delivery_fee , 
-        'sub_total': sub_total , 
-        'total': total , 
-        'discount': discount
+        'sub_total': round(sub_total,2) , 
+        'total': round(total,2) , 
+        'discount': round(discount,2),
+        'pub_key' : pub_key
         })
 
 
@@ -103,18 +105,42 @@ def add_to_cart(request):
     # cart_detail.save()
 def process_payment(request):
     # create product on strip  : ajax
+
+    cart = Cart.objects.get(user=request.user , completed=False)
+    cart_detail = CartDetail.objects.filter(cart=cart)
+    delivery_fee = DeliveryFee.objects.last().fee
+
+    if cart.total_with_coupon:
+        total = cart.total_with_coupon + delivery_fee   
+
+    else:
+        total = cart.cart_total() + delivery_fee 
+
+    code = generate_code()
+
+
+    stripe.api_key = settings.STRIPE_API_KEY_SECRET
+
     checkout_session = stripe.checkout.Session.create(
         line_items=[
             {
-                # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                'price': '{{PRICE_ID}}',
-                'quantity': 1,
+
+                'price_data' : {
+                    'currency' : 'usd' , 
+                    'product_data' : {
+                        'name': code
+                    },
+                   'unit_amount': int(total *100)
+                        },
+                'quantity' : 1
             },
         ],
         mode='payment',
         success_url='http://127.0.0.1:8000/orders/checkout/payment/success',
         cancel_url='http://127.0.0.1:8000/orders/checkout/payment/failed',
     )
+
+    return JsonResponse({'session':checkout_session})
 
 
 

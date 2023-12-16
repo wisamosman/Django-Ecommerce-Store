@@ -361,7 +361,23 @@
 function buy(event){
     event.preventDefault()
     console.log('process payment')
+
+    var stripe = Stripe('{{pub_key}}')
+
+    fetch('/orders/checkout/payment',{
+
+        method: 'POST' , 
+        headers: {
+        'Content-Type' : 'application/json' , 
+        'X-CSRFToken' : '{{csrf_token}}'
+        },
+    }).then(function(response){
+        return response.json();
+    }).then(function(session){
+        return stripe.redirectToCheckout({'sessionId': session.session.id})
+    })
 }
+
 
 
 
