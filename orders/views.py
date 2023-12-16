@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 
 # Create your views here.
 from django.views.generic import ListView
-from .models import Order, Cart , CartDetail, Coupon
+from .models import Order, Cart , CartDetail, Coupon,OrderDetail
 from products.models import Product
 from django.contrib.auth.mixins import LoginRequiredMixin
 from settings.models import DeliveryFee
@@ -10,6 +10,8 @@ import datetime
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from utils.generate_code import generate_code
+from django.contrib.sessions.models import Session
+from django.contrib.sessions.backends.db import SessionStore
 from django.conf import settings
 import stripe
 
@@ -117,6 +119,9 @@ def process_payment(request):
         total = cart.cart_total() + delivery_fee 
 
     code = generate_code()
+    # Save the generated code to the session
+    request.session['generated_code'] = code
+    request.session.save()    
 
 
     stripe.api_key = settings.STRIPE_API_KEY_SECRET
@@ -143,14 +148,32 @@ def process_payment(request):
     return JsonResponse({'session':checkout_session})
 
 
-
 def payment_success(request):
 
-    code = ''
-    return render(request,'orders/success.html',{
-        'code': code
-    })
+    cart = Cart.objects.get(user=request.user,completed=False)
+    cart_detail = CartDetail.objects.filter(cart=cart)
 
+    generated_code = request.session.get('generated_code')
+
+    # create order
+    new_order = Order.objects.create(user=request.user,code=generated_code)
+    for object in cart_detail:
+        OrderDetail.objects.create(
+            order=new_order,
+            product = object.product , 
+            price = object.price , 
+            quantity = object.quantity , 
+            total = object.total
+        )
+
+    cart.completed = True
+    cart.save()
+
+     # send 
+
+    return render(request,'orders/success.html',{
+        'code': generated_code
+    })
 
 
 def payment_failed(request):
